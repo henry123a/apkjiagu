@@ -15,7 +15,6 @@ import com.zhh.jiagu.shell.util.Utils;
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -222,9 +221,7 @@ public class LoadDexUtil {
 
         ArrayMap<?, ?> mProviderMap = (ArrayMap<?, ?>) RefInvoke.getFieldOjbect("android.app.ActivityThread", currentActivityThread, "mProviderMap");
         assert mProviderMap != null;
-        Iterator<?> it = mProviderMap.values().iterator();
-        while (it.hasNext()) {
-            Object providerClientRecord = it.next();
+        for (Object providerClientRecord : mProviderMap.values()) {
             Object localProvider = RefInvoke.getFieldOjbect("android.app.ActivityThread$ProviderClientRecord", providerClientRecord, "mLocalProvider");
             RefInvoke.setFieldOjbect("android.content.ContentProvider", "mContext", localProvider, app);
         }

@@ -56,9 +56,6 @@ public class Zip4jUtil {
 
     /**
      * 提取单个文件到指定的目录中
-     * @param zip
-     * @param fileName
-     * @param outDir
      */
     public static void extractFile(String zip,String fileName,String outDir){
         try {

@@ -12,7 +12,6 @@ public class FileUtils {
 
     /**
      * 删除指定的文件或目录
-     * @param path
      */
     public static void deleteFile(String path){
         File file = new File(path);
@@ -20,12 +19,16 @@ public class FileUtils {
         if (file.exists()){
             if (!file.isFile()) {
                 File[] files = file.listFiles();
+                assert files != null;
                 for (File child : files) {
                     deleteFile(child.getAbsolutePath());
                 }
                 //删除空目录
             }
-            file.delete();
+            boolean delete = file.delete();
+            if(!delete){
+                System.err.println("delete 异常");
+            }
         }
     }
 
@@ -68,7 +71,6 @@ public class FileUtils {
                     line = null;
                     break;
                 }else if (isFindApplicationTag && line.contains("android:name")){
-                    isFindApplicationTag = false;
                     break;
                 }
             }
@@ -78,8 +80,7 @@ public class FileUtils {
             //解析line获取application的class name
             if (line != null && line.contains("\"")){
                 String substr = line.substring(line.indexOf("\"")+1);
-                String clazzName = substr.substring(0,substr.indexOf("\""));
-                return clazzName;
+                return substr.substring(0,substr.indexOf("\""));
             }
         }catch (Exception e){
             e.printStackTrace();

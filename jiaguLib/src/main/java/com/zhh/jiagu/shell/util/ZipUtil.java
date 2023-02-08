@@ -32,16 +32,19 @@ public class ZipUtil {
         //开始解压
         //构建解压输入流
         ZipInputStream zIn = new ZipInputStream(new FileInputStream(apkFile));
-        ZipEntry entry = null;
-        File file = null;
+        ZipEntry entry;
+        File file;
         while ((entry = zIn.getNextEntry()) != null) {
             if (!entry.isDirectory() && !entry.getName().equals("")) {
                 file = new File(destDir, entry.getName());
                 if (!file.exists()) {
-                    file.getParentFile().mkdirs();//创建此文件的上级目录
+                    boolean mkdirs = file.getParentFile().mkdirs();//创建此文件的上级目录
+                    if(!mkdirs){
+                        System.err.println("mkdirs 异常");
+                    }
                 }
                 FileOutputStream fos = new FileOutputStream(file);
-                int len = -1;
+                int len;
                 byte[] buf = new byte[1024];
                 while ((len = zIn.read(buf)) != -1) {
                     fos.write(buf, 0, len);
@@ -53,7 +56,10 @@ public class ZipUtil {
                 file = new File(destDir, entry.getName());
                 //是文件夹的时候创建目录
                 if (!file.exists()){
-                    file.mkdirs();
+                    boolean mkdirs = file.mkdirs();
+                    if(!mkdirs){
+                        System.err.println("mkdirs 异常");
+                    }
                 }
             }
             zIn.closeEntry();

@@ -23,7 +23,7 @@ public class KeyStoreUtil {
 
         try {
             List<String> lines = Files.readAllLines(cf.toPath());
-            if (lines == null || lines.size() <= 0){
+            if (lines.size() <= 0){
                 System.out.println("签名配置文件内容为空");
                 return null;
             }

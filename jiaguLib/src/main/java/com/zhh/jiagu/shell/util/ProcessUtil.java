@@ -9,8 +9,6 @@ public class ProcessUtil {
 
     /**
      * 执行命令
-     * @param cmd
-     * @throws Exception
      */
     public static boolean executeCommand(String cmd) throws Exception{
         System.out.println("开始执行命令===>"+cmd);
