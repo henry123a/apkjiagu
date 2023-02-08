@@ -21,10 +21,10 @@ public class ZipUtil {
     /**
      * zip文件解压
      *
-     * @param apkFile   待解压文件夹/文件
+     * @param apkFile 待解压文件夹/文件
      * @param destDir 解压路径
      */
-    public static void unZip(File apkFile,File destDir) throws Exception{
+    public static void unZip(File apkFile, File destDir) throws Exception {
         // 判断源文件是否存在
         if (!apkFile.exists()) {
             throw new Exception(apkFile.getPath() + "所指文件不存在");
@@ -38,9 +38,10 @@ public class ZipUtil {
             if (!entry.isDirectory() && !entry.getName().equals("")) {
                 file = new File(destDir, entry.getName());
                 if (!file.exists()) {
-                    boolean mkdirs = file.getParentFile().mkdirs();//创建此文件的上级目录
-                    if(!mkdirs){
-                        System.err.println("mkdirs 异常");
+                    File parentFile = file.getParentFile();
+                    boolean mkdirs = parentFile.mkdirs();//创建此文件的上级目录
+                    if (!mkdirs && !parentFile.exists()) {
+                        System.err.println("mkdirs 异常==43====:" + parentFile.getAbsolutePath());
                     }
                 }
                 FileOutputStream fos = new FileOutputStream(file);
@@ -52,13 +53,13 @@ public class ZipUtil {
                 // 关流顺序，先打开的后关闭
                 fos.flush();
                 fos.close();
-            }else {
+            } else {
                 file = new File(destDir, entry.getName());
                 //是文件夹的时候创建目录
-                if (!file.exists()){
+                if (!file.exists()) {
                     boolean mkdirs = file.mkdirs();
-                    if(!mkdirs){
-                        System.err.println("mkdirs 异常");
+                    if (!mkdirs) {
+                        System.err.println("mkdirs 异常===61====");
                     }
                 }
             }
@@ -66,7 +67,6 @@ public class ZipUtil {
         }
         zIn.close();
     }
-
 
 
 }

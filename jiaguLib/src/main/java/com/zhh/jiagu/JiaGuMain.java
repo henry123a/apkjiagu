@@ -63,7 +63,7 @@ public class JiaGuMain {
         System.out.println("根目录=========>" + strDll);
         // load - 支持采用绝对路径的dll库
         // loadLibrary 加载的是jre/bin下的dll库
-        System.load(strDll);//这是我即将要重新实现的动态库名字
+      //  System.load(strDll);//这是我即将要重新实现的动态库名字
     }
 
     public static void main(String[] args) {
@@ -218,7 +218,8 @@ public class JiaGuMain {
         try {
             byte[] data = readFileBytes(originalDexZipFile);
             System.out.println("加密前数据大小为：" + data.length);
-            byte[] payloadArray = AESUtil.encrypt(data);//以二进制形式读出zip，并进行加密处理//对源Apk进行加密操作
+           // byte[] payloadArray = AESUtil.encrypt(data);//以二进制形式读出zip，并进行加密处理//对源Apk进行加密操作
+            byte[] payloadArray = data;
             byte[] unShellDexArray = readFileBytes(shellDexFile);//以二进制形式读出dex
             int payloadLen = payloadArray.length;
             int unShellDexLen = unShellDexArray.length;
