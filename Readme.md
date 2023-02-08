@@ -12,7 +12,8 @@ Android app apk 加固  forked from zhang-hai/apkjiagu
 
 3.`cmd`进入到当前目录，然后运行如下命令开始加固
 
->  java -jar jiaguLib.jar [apk名称] keystore.cfg
+      java -jar jiaguLib.jar [apk名称] keystore.cfg 
+例如： java -jar jiaguLib.jar demo-release.apk keystore.cfg
 
 
 `注：`
