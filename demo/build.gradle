@@ -9,6 +9,7 @@ android {
     defaultConfig {
         applicationId "com.zhh.jiagu.demo"
         minSdkVersion 21
+        //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -20,9 +21,25 @@ android {
         }
     }
 
+    signingConfigs {
+        signing {
+            keyAlias 'test'
+            keyPassword '123456'
+            storeFile file('../keystore.jks')
+            storePassword '123456'
+        }
+    }
+
     buildTypes {
         release {
+            minifyEnabled true
+            signingConfig signingConfigs.signing
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
             minifyEnabled false
+            signingConfig signingConfigs.signing
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
