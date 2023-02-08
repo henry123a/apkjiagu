@@ -71,6 +71,12 @@ task jiagu(){
             into{root.absolutePath}
             //include('**/*.aar')
         }
+        //复制apk
+        copy {
+            from 'demo/build/outputs/apk/release/demo-release.apk'
+            into{root.absolutePath}
+            //include('**/*.aar')
+        }
     }
 
 }

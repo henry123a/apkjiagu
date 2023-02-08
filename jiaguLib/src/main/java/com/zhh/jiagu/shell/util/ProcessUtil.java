@@ -7,6 +7,10 @@ import java.io.InputStreamReader;
 
 public class ProcessUtil {
 
+    public static void main(String[] args) throws Exception{
+        Process process = Runtime.getRuntime().exec("cmd /c ");
+    }
+
     /**
      * 执行命令
      */
