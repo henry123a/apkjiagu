@@ -41,7 +41,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-@SuppressWarnings("UnsafeDynamicallyLoadedCode")
+
 public class JiaGuMain {
 
     //    private final static String ROOT = "jiaguLib/";
@@ -58,12 +58,24 @@ public class JiaGuMain {
     private final static boolean isRelease = true;
 
     static {
-        File file = new File(ROOT);
-        String strDll = file.getAbsolutePath() + (isRelease ? "" : "/jiaguLib") + "/libs/sx_jiagu.dll";
-        System.out.println("根目录=========>" + strDll);
+        String path = System.getProperty("java.library.path");
+
+        if (path == null) {
+            throw new RuntimeException("Path isn't set.");
+        }else{
+            System.out.println("java.library.path:" + path);
+        }
+      //  File soFile = new File("jiaguLib/libs/x86_64/libsxjiagu.so");
+        File soFile = new File("jiaguLib/libs/sx_jiagu.dll");
+        String soPath = soFile.getAbsolutePath();
+        if (soFile.exists()) {
+            System.out.println("soFile存在:" + soPath);
+        } else {
+            System.err.println("soFile不存在:" + soPath);
+        }
         //load - 支持采用绝对路径的dll库
         //loadLibrary 加载的是jre/bin下的dll库
-        System.load(strDll);//这是我即将要重新实现的动态库名字
+        System.load(soPath);//这是我即将要重新实现的动态库名字
     }
 
     public static void main(String[] args) {
