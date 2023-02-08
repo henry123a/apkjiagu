@@ -58,7 +58,7 @@ public class ZipUtil {
                 //是文件夹的时候创建目录
                 if (!file.exists()) {
                     boolean mkdirs = file.mkdirs();
-                    if (!mkdirs) {
+                    if (!mkdirs && !file.exists()) {
                         System.err.println("mkdirs 异常===61====");
                     }
                 }
