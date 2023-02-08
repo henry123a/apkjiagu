@@ -4,7 +4,7 @@ import android.util.Log;
 
 public class LogUtil {
 
-    public static final String TAG = "JiaGuApk";
+    public static final String TAG = "LLpp";
 
     public static void info(String msg){
         Log.i(TAG,msg);

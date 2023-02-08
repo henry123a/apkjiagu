@@ -16,8 +16,6 @@ public class Utils {
 
     /**
      * 从apk包里面获取dex文件内容（byte）
-     * @return
-     * @throws IOException
      */
     public static byte[] readDexFileFromApk(String apkPath) throws IOException {
         LogUtil.info("从classes.dex解析出加密的原包的dex数据");
