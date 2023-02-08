@@ -1,4 +1,4 @@
-
+Android app apk 加固  forked from zhang-hai/apkjiagu
 ##### 工程目录说明
 - demo 待加固工程
 - jiagu_shell 壳工程
