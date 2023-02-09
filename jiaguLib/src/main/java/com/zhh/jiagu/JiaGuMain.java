@@ -1,5 +1,7 @@
 package com.zhh.jiagu;
 
+import com.enclib.AESUtil2;
+import com.enclib.CommFileUtil;
 import com.zhh.jiagu.shell.entity.KeyStore;
 import com.zhh.jiagu.shell.util.FileUtils;
 import com.zhh.jiagu.shell.util.KeyStoreUtil;
@@ -226,9 +228,9 @@ public class JiaGuMain {
         logTitle("步骤三：对步骤二的zip包进行加密，并与壳dex合成新dex文件");
         try {
             byte[] data = readFileBytes(originalDexZipFile);
-            System.out.println("加密前数据大小为：" + data.length);
-            // byte[] payloadArray = AESUtil.encrypt(data);//以二进制形式读出zip，并进行加密处理//对源Apk进行加密操作
-            byte[] payloadArray = data;
+            System.out.println("加密前数据大小为：" + CommFileUtil.getFormatSize(data.length));
+            byte[] payloadArray = AESUtil2.encrypt(data);//以二进制形式读出zip，并进行加密处理//对源Apk进行加密操作
+            System.out.println("加密后数据大小为：" + CommFileUtil.getFormatSize(payloadArray.length));
             byte[] unShellDexArray = readFileBytes(shellDexFile);//以二进制形式读出dex
             int payloadLen = payloadArray.length;
             int unShellDexLen = unShellDexArray.length;

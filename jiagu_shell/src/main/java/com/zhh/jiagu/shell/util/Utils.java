@@ -1,5 +1,8 @@
 package com.zhh.jiagu.shell.util;
 
+import com.enclib.AESUtil2;
+import com.enclib.CommFileUtil;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -64,11 +67,11 @@ public class Utils {
         System.arraycopy(apkdata, length - 4 - readInt, newdex, 0, readInt);
 
 
-        LogUtil.info("============ 开始对加密dex进行解密======" + newdex.length);
+        LogUtil.info("============ 开始对加密dex进行解密======" + CommFileUtil.getFormatSize(newdex.length));
         //对zip包进行解密
-        // newdex = AESUtil.decrypt(newdex);
+         newdex = AESUtil2.decrypt(newdex);
 
-        LogUtil.info("============ 解密后的大小为======" + newdex.length);
+        LogUtil.info("============ 解密后的大小为======" + CommFileUtil.getFormatSize(newdex.length));
 
         //写入AppDex.zip文件
         File file = new File(apkFileName);

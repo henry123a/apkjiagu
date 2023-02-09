@@ -1,4 +1,4 @@
-package com.zhh.jiagu.shell.util;
+package com.enclib;
 
 import java.nio.charset.StandardCharsets;
 
@@ -8,8 +8,8 @@ import javax.crypto.spec.SecretKeySpec;
 public class AESUtil2 {
 
     private static final String KEY_AES = "AES";
-
-    public static byte[] encrypt(byte[] src, String key) throws Exception {
+    private static  String key = "1234567891234567";
+    public static byte[] encrypt(byte[] src) throws Exception {
         if (key == null || key.length() != 16) {
             throw new Exception("key不满足条件");
         }
@@ -20,7 +20,7 @@ public class AESUtil2 {
         return cipher.doFinal(src);
     }
 
-    public static byte[] decrypt(byte[] src, String key) throws Exception {
+    public static byte[] decrypt(byte[] src) throws Exception {
         if (key == null || key.length() != 16) {
             throw new Exception("key不满足条件");
         }
@@ -65,10 +65,9 @@ public class AESUtil2 {
     public static void main(String[] args) throws Exception {
         String content = "testContext";
         System.out.println("原内容 = " + content);
-        String key = "1234567891234567";
-        byte[] en_data = AESUtil2.encrypt(content.getBytes(StandardCharsets.UTF_8), key);
+        byte[] en_data = AESUtil2.encrypt(content.getBytes(StandardCharsets.UTF_8));
         System.out.println("加密后 = " + byte2hex(en_data));
-        byte[] decrypt = AESUtil2.decrypt(en_data, key);
+        byte[] decrypt = AESUtil2.decrypt(en_data);
         System.out.println("解密后 = " + new String(decrypt, StandardCharsets.UTF_8));
     }
 
