@@ -145,6 +145,8 @@ public class JiaGuMain {
             long end = System.currentTimeMillis();
             long cost = (end - start) / 1000;
             System.out.println("执行完毕 花费时间cost: " + cost + "s");
+            boolean ret = ProcessUtil.executeCommand("adb install /Users/cg/Desktop/dev/github_projects/apkjiagu/out/demo-debug_align_signed.apk");
+            System.out.println("安装加固后的apk: " + ret);
         } catch (Exception e) {
             e.printStackTrace();
         }
