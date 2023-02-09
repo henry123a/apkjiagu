@@ -45,29 +45,29 @@ import javax.xml.transform.stream.StreamResult;
 
 public class JiaGuMain {
 
-    //    private final static String ROOT = "jiaguLib/";
-    private static String ROOT = "";
-    private static String OUT_TMP = ROOT + "temp/";
+    private static final String ROOT = "";
+    private static final String OUT_TMP = ROOT + "temp/";
 
-    private static String ORIGIN_APK = "demo/release/demo-release.apk";
 
-    private static String KEYSTORE_CFG = "keystore.cfg";
+    private static final String apkPath = "jiagu/demo-release.apk";
+    private static final String shellPath = "jiagu/aar/jiagu_shell-release.aar";
+    private static final String signInfoFilePath = "jiaguLib/keystore.cfg";
 
     private static final String apktoolPath = "/Users/cg/Desktop/dev/github_projects/apkjiagu/apktool.jar";
+    private static final String buildTools = "/Users/cg/Library/Android/sdk/build-tools/29.0.3/";
+    private static final String dxFullPath = buildTools + "dx";
+    private static final String zipalignPath = buildTools + "zipalign";
+    private static final String apksignerPath = buildTools + "apksigner";
 
-    /**
-     * 是否发布为Jar包，运行的
-     */
-    private final static boolean isRelease = true;
-    private static final String apkPath = "jiagu/demo-release.apk";
-    private static final String signInfoFilePath = "jiagu/keystore.cfg";
 
     static {
-        File file = new File(ROOT);
-        String strDll = file.getAbsolutePath() + (isRelease ? "" : "/jiaguLib") + "/libs/sx_jiagu.dll";
-        System.out.println("根目录=========>" + strDll);
-        System.out.println("apk 文件是否存在" + new File(apkPath).exists());
-        System.out.println("签名信息 文件是否存在" + new File(signInfoFilePath).exists());
+        System.out.println("1. apk 文件是否存在: " + new File(apkPath).exists());
+        System.out.println("2. 壳 文件是否存在: " + new File(shellPath).exists());
+        System.out.println("3. 签名信息 文件是否存在: " + new File(signInfoFilePath).exists());
+        System.out.println("4. apktool.jar 文件是否存在: " + new File(apktoolPath).exists());
+        System.out.println("5. dx 文件是否存在: " + new File(dxFullPath).exists());
+        System.out.println("6. zipalign 文件是否存在: " + new File(zipalignPath).exists());
+        System.out.println("6. apksigner 文件是否存在: " + new File(apksignerPath).exists());
         // load - 支持采用绝对路径的dll库
         // loadLibrary 加载的是jre/bin下的dll库
         //  System.load(strDll);//这是我即将要重新实现的动态库名字
@@ -81,30 +81,22 @@ public class JiaGuMain {
     }
 
     private static void start(String[] args) {
-        if (!isRelease) {
-            ROOT = "jiaguLib/";
-            OUT_TMP = ROOT + "temp/";
-            JiaGuMain jiagu = new JiaGuMain();
-            jiagu.beginJiaGu();
-        } else {
-            if (args == null || args.length != 2) {
-                System.out.println("请使用：java -jar jiaguLib.jar [apk文件] [签名配置文件]");
-                return;
-            }
-            String apkFilepath = args[0];
-            KEYSTORE_CFG = args[1];
-            File file = new File(apkFilepath);
-            if (file.exists() && apkFilepath.endsWith(".apk")) {
-                if (new File(KEYSTORE_CFG).exists()) {
-                    ORIGIN_APK = apkFilepath;
-                    JiaGuMain jiagu = new JiaGuMain();
-                    jiagu.beginJiaGu();
-                } else {
-                    System.out.println("签名配置文件不存在!");
-                }
+        if (args == null || args.length != 2) {
+            System.out.println("请使用：java -jar jiaguLib.jar [apk文件] [签名配置文件]");
+            return;
+        }
+        String apkFilepath = args[0];
+
+        File file = new File(apkFilepath);
+        if (file.exists() && apkFilepath.endsWith(".apk")) {
+            if (new File(signInfoFilePath).exists()) {
+                JiaGuMain jiagu = new JiaGuMain();
+                jiagu.beginJiaGu();
             } else {
-                System.out.println(apkFilepath + " is invalid apk path.");
+                System.out.println("签名配置文件不存在!");
             }
+        } else {
+            System.out.println(apkFilepath + " is invalid apk path.");
         }
     }
 
@@ -158,10 +150,6 @@ public class JiaGuMain {
         }
     }
 
-    String dxFullPath = "/Users/cg/Library/Android/sdk/build-tools/29.0.3/dx";
-    String zipalignPath = "/Users/cg/Library/Android/sdk/build-tools/29.0.3/zipalign";
-    String apksignerPath = "/Users/cg/Library/Android/sdk/build-tools/29.0.3/apksigner";
-
     /**
      * 步骤一：将加固壳中的aar中的jar转成dex文件
      *
@@ -170,7 +158,7 @@ public class JiaGuMain {
     private File shellAar2Dex() throws Exception {
         logTitle("步骤一：将加固壳中的aar中的jar转成dex文件");
         //步骤一：将加固壳中的aar中的jar转成dex文件
-        File aarFile = new File(ROOT + "jiagu/aar/jiagu_shell-release.aar");
+        File aarFile = new File(shellPath);
         File aarTemp = new File(OUT_TMP + "shell");
         ZipUtil.unZip(aarFile, aarTemp);
         File classesJar = new File(aarTemp, "classes.jar");
@@ -188,7 +176,7 @@ public class JiaGuMain {
     private File apkUnzipAndZipDexFiles() {
         logTitle("步骤二：将需要加固的APK解压，并将所有dex文件打包成一个zip包，方便后续进行加密处理");
         //下面加密码APK中所有的dex文件
-        File apkFile = new File(ORIGIN_APK);
+        File apkFile = new File(apkPath);
         File apkTemp = new File(OUT_TMP + "unzip/");
         try {
             //首先把apk解压出来
@@ -293,7 +281,6 @@ public class JiaGuMain {
      * 缺点：非常耗时，在21000ms左右(不包含删除反编译的临时文件的时间)
      */
     private String modifyOriginApkManifest() throws Exception {
-        String apkPath = ORIGIN_APK;
         String outputPath = OUT_TMP + "apk/";
         logTitle("步骤四：修改AndroidManifest（Application的android:name属性和新增<meta-data>）");
         String path = "";
@@ -329,7 +316,6 @@ public class JiaGuMain {
      */
     @SuppressWarnings("unused")
     private String modifyOriginApkManifest2() throws Exception {
-        String apkPath = ORIGIN_APK;
         logTitle("步骤四：修改AndroidManifest（Application的android:name属性和新增<meta-data>）");
         String outApk = "";
 
@@ -368,7 +354,7 @@ public class JiaGuMain {
 
             //5.将修改完成的AndroidManifest.xml重新添加到apk中
             outApk = OUT_TMP + apkPath.substring(apkPath.lastIndexOf("/") + 1);
-            Files.copy(new File(ORIGIN_APK).toPath(), new File(outApk).toPath(), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(new File(apkPath).toPath(), new File(outApk).toPath(), StandardCopyOption.REPLACE_EXISTING);
             ProcessUtil.executeCommand("aapt r " + outApk + " AndroidManifest.xml");
             Zip4jUtil.addFile2Zip(outApk, manifestFile.getPath(), "");
             FileUtils.deleteFile(manifestFile.getPath());
@@ -469,7 +455,7 @@ public class JiaGuMain {
      */
     private void resignApk(File unSignedApk) throws Exception {
         logTitle("步骤七：对生成的APK进行签名");
-        KeyStore store = KeyStoreUtil.readKeyStoreConfig((isRelease ? "" : "jiaguLib/") + KEYSTORE_CFG);
+        KeyStore store = KeyStoreUtil.readKeyStoreConfig(signInfoFilePath);
         //步骤五：对APK进行签名
         File signedApk = new File(ROOT + "out", unSignedApk.getName().replace(".apk", "_signed.apk"));
         //创建保存加固后apk目录
