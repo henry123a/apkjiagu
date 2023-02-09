@@ -32,7 +32,6 @@ task clean(type: Delete) {
 
 //自动化构建，生成加固所需要的资源
 task jiagu() {
-
     delete project('jiagu_shell').buildDir
     delete project('demo').buildDir
     delete project('jiaguLib').buildDir
@@ -49,20 +48,19 @@ task jiagu() {
         if (root.exists()) {
             delete root
         }
-      //  root = rootProject.mkdir('jiagu')
+         root = rootProject.mkdir('jiagu')
         println("jiagu ============= 已重新创建了 - jiagu目录")
-        //将aar文件复制到jiagu目录中
-//        copy {
-//            from 'jiagu_shell/build/outputs/aar'
-//            into { root.absolutePath + "/aar" }
-//            //include('**/*.aar')
-//        }
-//        //复制apk
-//        copy {
-//            from 'demo/build/outputs/apk/release/demo-release.apk'
-//            into { root.absolutePath }
-//            //include('**/*.aar')
-//        }
+        copy {
+            from 'jiagu_shell/build/outputs/aar'
+            into { root.absolutePath + "/aar" }
+            //include('**/*.aar')
+        }
+        //复制apk
+        copy {
+            from 'demo/build/outputs/apk/debug/demo-debug.apk'
+            into { root.absolutePath }
+            //include('**/*.aar')
+        }
        // def p1 = 'java -jar jiaguLib.jar demo-release.apk keystore.cfg'.execute()
 
     }
