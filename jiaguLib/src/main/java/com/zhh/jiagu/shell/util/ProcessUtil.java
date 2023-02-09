@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 public class ProcessUtil {
 
     public static void main(String[] args) throws Exception{
-        Process process = Runtime.getRuntime().exec("cmd /c ");
+        Process process = Runtime.getRuntime().exec("ls");
     }
 
     /**
@@ -16,7 +16,7 @@ public class ProcessUtil {
      */
     public static boolean executeCommand(String cmd) throws Exception{
         System.out.println("开始执行命令===>"+cmd);
-        Process process = Runtime.getRuntime().exec("cmd /c "+cmd);
+        Process process = Runtime.getRuntime().exec(""+cmd);
         ProcessUtil.consumeInputStream(process.getInputStream());
         ProcessUtil.consumeInputStream(process.getErrorStream());
         process.waitFor();

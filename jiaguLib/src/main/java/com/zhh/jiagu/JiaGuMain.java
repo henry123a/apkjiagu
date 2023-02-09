@@ -1,7 +1,6 @@
 package com.zhh.jiagu;
 
 import com.zhh.jiagu.shell.entity.KeyStore;
-import com.zhh.jiagu.shell.util.AESUtil;
 import com.zhh.jiagu.shell.util.FileUtils;
 import com.zhh.jiagu.shell.util.KeyStoreUtil;
 import com.zhh.jiagu.shell.util.ProcessUtil;
@@ -51,6 +50,8 @@ public class JiaGuMain {
     private static String ORIGIN_APK = "demo/release/demo-release.apk";
 
     private static String KEYSTORE_CFG = "keystore.cfg";
+
+    private static final String apktoolPath = "/Users/cg/Desktop/dev/github_projects/apkjiagu/apktool.jar";
 
     /**
      * 是否发布为Jar包，运行的
@@ -139,6 +140,7 @@ public class JiaGuMain {
             e.printStackTrace();
         }
     }
+    String dxFullPath = "/Users/cg/Library/Android/sdk/build-tools/29.0.3/dx";
 
     /**
      * 步骤一：将加固壳中的aar中的jar转成dex文件
@@ -153,7 +155,7 @@ public class JiaGuMain {
         ZipUtil.unZip(aarFile, aarTemp);
         File classesJar = new File(aarTemp, "classes.jar");
         File classesDex = new File(aarTemp, "classes.dex");
-        boolean ret = ProcessUtil.executeCommand(String.format(Locale.CHINESE, "dx --dex --output %s %s", classesDex.getPath(), classesJar.getPath()));
+        boolean ret = ProcessUtil.executeCommand(String.format(Locale.CHINESE, dxFullPath + " --dex --output %s %s", classesDex.getPath(), classesJar.getPath()));
         if (ret) {
             System.out.println("已生成======" + classesDex.getPath());
         }
@@ -278,7 +280,7 @@ public class JiaGuMain {
         long start = System.currentTimeMillis();
         //1：执行命令进行反编译原apk
         System.out.println("开始反编译原apk ......");
-        boolean ret = ProcessUtil.executeCommand("apktool d -o " + outputPath + " " + apkPath);
+        boolean ret = ProcessUtil.executeCommand("java -jar "+ apktoolPath + " d -o " + outputPath + " " + apkPath);
         if (ret) {
             //2.修改AndroidManifest.xml，使用壳的Application替换原Application,并将原Application名称配置在meta-data中
             modifyAndroidManifest(new File(outputPath, "AndroidManifest.xml"));
@@ -286,7 +288,7 @@ public class JiaGuMain {
             //3：重新编译成apk,仍以原来名称命名
             System.out.println("开始回编译apk ......");
             String apk = OUT_TMP + apkPath.substring(apkPath.lastIndexOf("/") + 1);
-            ret = ProcessUtil.executeCommand(String.format(Locale.CHINESE, "apktool b -o %s %s", apk, outputPath));
+            ret = ProcessUtil.executeCommand(String.format(Locale.CHINESE, "java -jar "+ apktoolPath + " b -o %s %s", apk, outputPath));
             if (ret) {
                 path = apk;
             }

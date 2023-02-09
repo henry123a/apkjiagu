@@ -31,7 +31,7 @@ task clean(type: Delete) {
 
 
 //自动化构建，生成加固所需要的资源
-task jiagu(){
+task jiagu() {
 
     delete project('jiagu_shell').buildDir
     //打包编译壳aar
@@ -45,8 +45,8 @@ task jiagu(){
         println("jiagu ============= 已编译Aar")
 
         //在根工程中创建jiagu文件夹
-        def root = new File(rootDir,'/jiagu')
-        if (root.exists()){
+        def root = new File(rootDir, '/jiagu')
+        if (root.exists()) {
             delete root
         }
         root = rootProject.mkdir('jiagu')
@@ -54,29 +54,41 @@ task jiagu(){
         //将aar文件复制到jiagu目录中
         copy {
             from 'jiagu_shell/build/outputs/aar'
-            into{root.absolutePath+"/aar"}
+            into { root.absolutePath + "/aar" }
             //include('**/*.aar')
         }
 
         //复制依赖的库文件信息
         copy {
             from 'jiaguLib/libs'
-            into{root.absolutePath+"/libs"}
+            into { root.absolutePath + "/libs" }
             //include('**/*.aar')
         }
 
         //复制加固jar和签名配置文件
         copy {
-            from 'jiaguLib/build/libs','jiaguLib/keystore.cfg'
-            into{root.absolutePath}
+            from 'jiaguLib/build/libs', 'jiaguLib/keystore.cfg'
+            into { root.absolutePath }
             //include('**/*.aar')
         }
         //复制apk
         copy {
             from 'demo/build/outputs/apk/release/demo-release.apk'
-            into{root.absolutePath}
+            into { root.absolutePath }
             //include('**/*.aar')
         }
+        println("开始执行加固命令...")
+       // def p1 = 'java -jar jiaguLib.jar demo-release.apk keystore.cfg'.execute()
+        // println(getExeInfo(p1))
     }
 
+}
+
+
+static String getExeInfo(p1) {
+    p1.waitFor()
+    InputStream is = p1.getInputStream()
+    String text = is.getText("utf-8").replace(":", "_").replace("+0800", "")
+    is.close()
+    text
 }
