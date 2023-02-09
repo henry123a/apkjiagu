@@ -96,7 +96,7 @@ public class JiaGuMain {
                 System.out.println("签名配置文件不存在!");
             }
         } else {
-            System.out.println(apkFilepath + " is invalid apk path.");
+            System.err.println(apkFilepath + " 无效apk 路径， 终止程序. ");
         }
     }
 

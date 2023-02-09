@@ -1,6 +1,7 @@
 plugins {
-    id 'java-library'
+    id "application"
 }
+apply plugin : "java"
 
 //配置META-INFO/MANIFEST.MF文件
 jar{
@@ -11,14 +12,22 @@ jar{
     manifest.attributes(map)
 }
 
+ext {
+    javaMainClass = "com.zhh.jiagu.JiaGuMain"
+}
+
+application {
+    mainClassName = javaMainClass
+}
+
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 dependencies {
-    api fileTree(include: ['*.jar'], dir: 'libs')
-    api project(path: ':encLib')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(path: ':encLib')
 }
 
 

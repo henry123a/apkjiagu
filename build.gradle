@@ -49,7 +49,6 @@ task jiagu() {
             delete root
         }
          root = rootProject.mkdir('jiagu')
-        println("jiagu ============= 已重新创建了 - jiagu目录")
         copy {
             from 'jiagu_shell/build/outputs/aar'
             into { root.absolutePath + "/aar" }
@@ -61,11 +60,14 @@ task jiagu() {
             into { root.absolutePath }
             //include('**/*.aar')
         }
-       // def p1 = 'java -jar jiaguLib.jar demo-release.apk keystore.cfg'.execute()
+        println("拷贝aar apk 完毕")
+        // Task task = project('jiaguLib').tasks.findByPath(':jiaguLib:run')
 
+       // def p1 = 'java -jar jiaguLib.jar demo-release.apk keystore.cfg'.execute()
     }
 
 }
+
 
 
 static String getExeInfo(p1) {
