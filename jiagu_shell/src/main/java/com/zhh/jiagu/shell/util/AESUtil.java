@@ -15,7 +15,10 @@ public class AESUtil {
      * @param data 加密的数据
      * @return 返回解密的数据
      */
-    public static native byte[] decrypt(byte[] data);
+   // public static native byte[] decrypt(byte[] data);
+    public static byte[] decrypt(byte[] data){
+        return data;
+    }
 
     public static void loadJiaGuLibrary(){
         // Used to load the 'nativelib' library on application startup.

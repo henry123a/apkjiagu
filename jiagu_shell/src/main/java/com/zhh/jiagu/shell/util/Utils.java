@@ -66,7 +66,7 @@ public class Utils {
 
         LogUtil.info("============ 开始对加密dex进行解密======" + newdex.length);
         //对zip包进行解密
-        newdex = AESUtil.decrypt(newdex);
+        // newdex = AESUtil.decrypt(newdex);
 
         LogUtil.info("============ 解密后的大小为======" + newdex.length);
 
