@@ -60,11 +60,11 @@ public class JiaGuMain {
 
     static {
         File file = new File(ROOT);
-        String strDll = file.getAbsolutePath() + (isRelease ? "" : "/jiaguLib")+"/libs/sx_jiagu.dll";
+        String strDll = file.getAbsolutePath() + (isRelease ? "" : "/jiaguLib") + "/libs/sx_jiagu.dll";
         System.out.println("根目录=========>" + strDll);
         // load - 支持采用绝对路径的dll库
         // loadLibrary 加载的是jre/bin下的dll库
-      //  System.load(strDll);//这是我即将要重新实现的动态库名字
+        //  System.load(strDll);//这是我即将要重新实现的动态库名字
     }
 
     public static void main(String[] args) {
@@ -109,6 +109,7 @@ public class JiaGuMain {
      */
     public void beginJiaGu() {
         try {
+            long start = System.currentTimeMillis();
             //前奏 - 先将目录删除
             FileUtils.deleteFile(OUT_TMP);
 
@@ -136,10 +137,14 @@ public class JiaGuMain {
                     resignApk(apk);
                 }
             }
+            long end = System.currentTimeMillis();
+            long cost = (end - start) / 1000;
+            System.out.println("执行完毕 花费时间cost: " + cost + "s");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     String dxFullPath = "/Users/cg/Library/Android/sdk/build-tools/29.0.3/dx";
     String zipalignPath = "/Users/cg/Library/Android/sdk/build-tools/29.0.3/zipalign";
     String apksignerPath = "/Users/cg/Library/Android/sdk/build-tools/29.0.3/apksigner";
@@ -222,7 +227,7 @@ public class JiaGuMain {
         try {
             byte[] data = readFileBytes(originalDexZipFile);
             System.out.println("加密前数据大小为：" + data.length);
-           // byte[] payloadArray = AESUtil.encrypt(data);//以二进制形式读出zip，并进行加密处理//对源Apk进行加密操作
+            // byte[] payloadArray = AESUtil.encrypt(data);//以二进制形式读出zip，并进行加密处理//对源Apk进行加密操作
             byte[] payloadArray = data;
             byte[] unShellDexArray = readFileBytes(shellDexFile);//以二进制形式读出dex
             int payloadLen = payloadArray.length;
@@ -282,7 +287,7 @@ public class JiaGuMain {
         long start = System.currentTimeMillis();
         //1：执行命令进行反编译原apk
         System.out.println("开始反编译原apk ......");
-        boolean ret = ProcessUtil.executeCommand("java -jar "+ apktoolPath + " d -o " + outputPath + " " + apkPath);
+        boolean ret = ProcessUtil.executeCommand("java -jar " + apktoolPath + " d -o " + outputPath + " " + apkPath);
         if (ret) {
             //2.修改AndroidManifest.xml，使用壳的Application替换原Application,并将原Application名称配置在meta-data中
             modifyAndroidManifest(new File(outputPath, "AndroidManifest.xml"));
@@ -290,7 +295,7 @@ public class JiaGuMain {
             //3：重新编译成apk,仍以原来名称命名
             System.out.println("开始回编译apk ......");
             String apk = OUT_TMP + apkPath.substring(apkPath.lastIndexOf("/") + 1);
-            ret = ProcessUtil.executeCommand(String.format(Locale.CHINESE, "java -jar "+ apktoolPath + " b -o %s %s", apk, outputPath));
+            ret = ProcessUtil.executeCommand(String.format(Locale.CHINESE, "java -jar " + apktoolPath + " b -o %s %s", apk, outputPath));
             if (ret) {
                 path = apk;
             }
