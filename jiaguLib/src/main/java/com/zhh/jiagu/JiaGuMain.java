@@ -141,6 +141,8 @@ public class JiaGuMain {
         }
     }
     String dxFullPath = "/Users/cg/Library/Android/sdk/build-tools/29.0.3/dx";
+    String zipalignPath = "/Users/cg/Library/Android/sdk/build-tools/29.0.3/zipalign";
+    String apksignerPath = "/Users/cg/Library/Android/sdk/build-tools/29.0.3/apksigner";
 
     /**
      * 步骤一：将加固壳中的aar中的jar转成dex文件
@@ -431,7 +433,7 @@ public class JiaGuMain {
         logTitle("步骤六：重新对APK进行对齐处理.....");
         //步骤四：重新对APK进行对齐处理
         File alignedApk = new File(unAlignedApk.getParent(), unAlignedApk.getName().replace(".apk", "_align.apk"));
-        boolean ret = ProcessUtil.executeCommand("zipalign -v -p 4 " + unAlignedApk.getPath() + " " + alignedApk.getPath());
+        boolean ret = ProcessUtil.executeCommand(zipalignPath + " -v -p 4 " + unAlignedApk.getPath() + " " + alignedApk.getPath());
         if (ret) {
             System.out.println("已完成APK进行对齐处理======");
         }
@@ -461,7 +463,7 @@ public class JiaGuMain {
         }
 
         assert store != null;
-        String signerCmd = String.format("apksigner sign --ks %s --ks-key-alias %s --min-sdk-version 21 --ks-pass pass:%s --key-pass pass:%s --out %s %s",
+        String signerCmd = String.format(apksignerPath + " sign --ks %s --ks-key-alias %s --min-sdk-version 21 --ks-pass pass:%s --key-pass pass:%s --out %s %s",
                 store.storeFile, store.alias, store.storePassword, store.keyPassword, signedApk.getPath(), unSignedApk.getPath());
 
         boolean ret = ProcessUtil.executeCommand(signerCmd);
