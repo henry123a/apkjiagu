@@ -59,17 +59,28 @@ public class JiaGuMain {
      * 是否发布为Jar包，运行的
      */
     private final static boolean isRelease = true;
+    private static final String apkPath = "jiagu/demo-release.apk";
+    private static final String signInfoFilePath = "jiagu/keystore.cfg";
 
     static {
         File file = new File(ROOT);
         String strDll = file.getAbsolutePath() + (isRelease ? "" : "/jiaguLib") + "/libs/sx_jiagu.dll";
         System.out.println("根目录=========>" + strDll);
+        System.out.println("apk 文件是否存在" + new File(apkPath).exists());
+        System.out.println("签名信息 文件是否存在" + new File(signInfoFilePath).exists());
         // load - 支持采用绝对路径的dll库
         // loadLibrary 加载的是jre/bin下的dll库
         //  System.load(strDll);//这是我即将要重新实现的动态库名字
     }
 
     public static void main(String[] args) {
+        if (args == null || args.length != 2) {
+            args = new String[]{apkPath, signInfoFilePath};
+        }
+        start(args);
+    }
+
+    private static void start(String[] args) {
         if (!isRelease) {
             ROOT = "jiaguLib/";
             OUT_TMP = ROOT + "temp/";
@@ -80,19 +91,19 @@ public class JiaGuMain {
                 System.out.println("请使用：java -jar jiaguLib.jar [apk文件] [签名配置文件]");
                 return;
             }
-            String arg = args[0];
+            String apkFilepath = args[0];
             KEYSTORE_CFG = args[1];
-            File file = new File(arg);
-            if (file.exists() && arg.endsWith(".apk")) {
+            File file = new File(apkFilepath);
+            if (file.exists() && apkFilepath.endsWith(".apk")) {
                 if (new File(KEYSTORE_CFG).exists()) {
-                    ORIGIN_APK = arg;
+                    ORIGIN_APK = apkFilepath;
                     JiaGuMain jiagu = new JiaGuMain();
                     jiagu.beginJiaGu();
                 } else {
                     System.out.println("签名配置文件不存在!");
                 }
             } else {
-                System.out.println(arg + " is invalid apk path.");
+                System.out.println(apkFilepath + " is invalid apk path.");
             }
         }
     }
@@ -159,7 +170,7 @@ public class JiaGuMain {
     private File shellAar2Dex() throws Exception {
         logTitle("步骤一：将加固壳中的aar中的jar转成dex文件");
         //步骤一：将加固壳中的aar中的jar转成dex文件
-        File aarFile = new File(ROOT + "aar/jiagu_shell-release.aar");
+        File aarFile = new File(ROOT + "jiagu/aar/jiagu_shell-release.aar");
         File aarTemp = new File(OUT_TMP + "shell");
         ZipUtil.unZip(aarFile, aarTemp);
         File classesJar = new File(aarTemp, "classes.jar");
