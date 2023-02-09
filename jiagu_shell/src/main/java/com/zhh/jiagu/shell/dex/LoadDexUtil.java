@@ -41,11 +41,8 @@ public class LoadDexUtil {
             String odexPath = odex.getAbsolutePath();
             //按版本号来标记zip
             String dexFilePath = String.format(Locale.CHINESE, "%s/AppDex_%d.zip", odexPath, appVersionCode);
-
-            LogUtil.info("decodeDexAndReplace ======dexFilePath:" + dexFilePath);
-
             File dexFile = new File(dexFilePath);
-            LogUtil.info("dexFile size ===== " + dexFile.length());
+            LogUtil.info("dexFile size ===== " + dexFile.length() + " dex path:" + dexFilePath);
 //            if (dexFile.exists()){
 //                dexFile.delete();
 //            }
@@ -68,15 +65,12 @@ public class LoadDexUtil {
                 if (!newFile) {
                     LogUtil.info("创建新文件失败...");
                 }
-
                 String apkPath = context.getApplicationInfo().sourceDir;
                 // 读取程序classes.dex文件
                 byte[] dexdata = Utils.readDexFileFromApk(apkPath);
-
                 //从classes.dex中再取出AppDex.zip解密后存放到/AppDex.zip，及其so文件放到payload_lib下
                 Utils.releaseAppDexFile(dexdata, dexFilePath);
-
-                LogUtil.info("解压和解密耗时 ===== " + (System.currentTimeMillis() - start) + "  === " + dexFile.exists());
+                LogUtil.info("解压和解密耗时:" + (System.currentTimeMillis() - start) + "  === " + dexFile.exists());
             }
             // 配置动态加载环境
             //获取主线程对象

@@ -27,7 +27,7 @@ Android app apk 加固  forked from zhang-hai/apkjiagu
 apksigner sign --ks [.jks文件门路] --ks-key-alias [别名] --min-sdk-version [你的最低反对版本] --out [签名过导出的aab文件] [行将签名的aab]
 ```
 
-
+adb install /Users/cg/Desktop/dev/github_projects/apkjiagu/out/demo-debug_align_signed.apk
 关于原理详解可查看[APK加固原理详解](https://www.jianshu.com/p/89dee4891f70)
 
 若想查看加密使用的C++工程请移步[jiagu_aes_project](https://github.com/zhang-hai/jiagu_aes_project)

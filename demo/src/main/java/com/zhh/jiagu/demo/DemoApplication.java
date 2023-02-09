@@ -3,7 +3,6 @@ package com.zhh.jiagu.demo;
 import android.app.Application;
 import android.content.Context;
 
-import com.tencent.mmkv.MMKV;
 
 public class DemoApplication extends Application {
 
@@ -14,7 +13,6 @@ public class DemoApplication extends Application {
         super.onCreate();
 
         instance = this;
-        initMMKV();
 
     }
 
@@ -23,7 +21,5 @@ public class DemoApplication extends Application {
         return instance;
     }
 
-    private void initMMKV() {
-        MMKV.initialize(this);
-    }
+
 }
