@@ -24,11 +24,8 @@ public class StubApplication extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
 
-        AESUtil.loadJiaGuLibrary();
-
         //加载dex，并解密出原app的dex文件进行加载
         boolean result = LoadDexUtil.decodeDexAndReplace(this,getAppVersionCode());
-
         if (result){
             //生成原Application，并手动安装ContentProviders
             app = LoadDexUtil.makeApplication(getSrcApplicationClassName());

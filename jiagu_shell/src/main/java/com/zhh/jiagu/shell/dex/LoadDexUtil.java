@@ -42,10 +42,10 @@ public class LoadDexUtil {
             //按版本号来标记zip
             String dexFilePath = String.format(Locale.CHINESE, "%s/AppDex_%d.zip", odexPath, appVersionCode);
 
-            LogUtil.info("decodeDexAndReplace =============================开始");
+            LogUtil.info("decodeDexAndReplace ======dexFilePath:" + dexFilePath);
 
             File dexFile = new File(dexFilePath);
-            LogUtil.info("apk size ===== " + dexFile.length());
+            LogUtil.info("dexFile size ===== " + dexFile.length());
 //            if (dexFile.exists()){
 //                dexFile.delete();
 //            }
@@ -95,7 +95,6 @@ public class LoadDexUtil {
             //base.getClassLoader(); 是不是就等同于 (ClassLoader) RefInvoke.getFieldOjbect()? 有空验证下//?
             //把当前进程的DexClassLoader 设置成了被加壳apk的DexClassLoader  ----有点c++中进程环境的意思~~
             RefInvoke.setFieldOjbect("android.app.LoadedApk", "mClassLoader", wr.get(), dLoader);
-
             LogUtil.info("decodeDexAndReplace ============================= 结束");
             return true;
         } catch (Exception e) {

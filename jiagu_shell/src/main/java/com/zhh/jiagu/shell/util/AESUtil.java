@@ -22,6 +22,6 @@ public class AESUtil {
 
     public static void loadJiaGuLibrary(){
         // Used to load the 'nativelib' library on application startup.
-        System.loadLibrary("sxjiagu");
+      //  System.loadLibrary("sxjiagu");
     }
 }

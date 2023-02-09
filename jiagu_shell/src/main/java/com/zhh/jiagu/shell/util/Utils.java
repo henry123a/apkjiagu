@@ -68,7 +68,7 @@ public class Utils {
         System.arraycopy(apkdata, length - 4 - readInt, newdex, 0, readInt);
         LogUtil.info("============ 开始对加密dex进行解密======" + getFormatSize(newdex.length));
         //对zip包进行解密
-        // newdex = AESUtil2.decrypt(newdex);
+        newdex = AESUtil2.decrypt(newdex);
         LogUtil.info("============ 解密后的大小为======" + getFormatSize(newdex.length));
         //写入AppDex.zip文件
         File file = new File(apkFileName);
