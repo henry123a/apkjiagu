@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -65,14 +66,10 @@ public class Utils {
         byte[] newdex = new byte[readInt];
         //把被加壳apk内容拷贝到newdex中
         System.arraycopy(apkdata, length - 4 - readInt, newdex, 0, readInt);
-
-
-        LogUtil.info("============ 开始对加密dex进行解密======" + CommFileUtil.getFormatSize(newdex.length));
+        LogUtil.info("============ 开始对加密dex进行解密======" + getFormatSize(newdex.length));
         //对zip包进行解密
-         newdex = AESUtil2.decrypt(newdex);
-
-        LogUtil.info("============ 解密后的大小为======" + CommFileUtil.getFormatSize(newdex.length));
-
+        // newdex = AESUtil2.decrypt(newdex);
+        LogUtil.info("============ 解密后的大小为======" + getFormatSize(newdex.length));
         //写入AppDex.zip文件
         File file = new File(apkFileName);
         try {
@@ -85,5 +82,29 @@ public class Utils {
         //LogUtil.info("============ 开始对压缩包进行解压得到dex文件======");
         // todo:由于仅加密的是源dex文件，故这里不需要检查so文件
 
+    }
+
+    public static String getFormatSize(double size) {
+        double kb = size / 1024;
+        double mb = kb / 1024;
+        if (mb < 1) {
+            BigDecimal result1 = new BigDecimal(Double.toString(kb));
+            return result1.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "KB";
+        }
+
+        double gb = mb / 1024;
+        if (gb < 1) {
+            BigDecimal result2 = new BigDecimal(Double.toString(mb));
+            return result2.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "MB";
+        }
+
+        double teraBytes = gb / 1024;
+        if (teraBytes < 1) {
+            BigDecimal result3 = new BigDecimal(Double.toString(gb));
+            return result3.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "GB";
+        }
+        BigDecimal result4 = new BigDecimal(teraBytes);
+
+        return result4.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "TB";
     }
 }

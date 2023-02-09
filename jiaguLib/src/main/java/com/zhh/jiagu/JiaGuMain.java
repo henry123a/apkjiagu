@@ -228,7 +228,8 @@ public class JiaGuMain {
         try {
             byte[] data = readFileBytes(originalDexZipFile);
             System.out.println("加密前数据大小为：" + CommFileUtil.getFormatSize(data.length));
-            byte[] payloadArray = AESUtil2.encrypt(data);//以二进制形式读出zip，并进行加密处理//对源Apk进行加密操作
+           // byte[] payloadArray = AESUtil2.encrypt(data);//以二进制形式读出zip，并进行加密处理//对源Apk进行加密操作
+            byte[] payloadArray = data;
             System.out.println("加密后数据大小为：" + CommFileUtil.getFormatSize(payloadArray.length));
             byte[] unShellDexArray = readFileBytes(shellDexFile);//以二进制形式读出dex
             int payloadLen = payloadArray.length;
