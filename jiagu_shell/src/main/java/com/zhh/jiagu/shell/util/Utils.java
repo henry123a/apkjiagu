@@ -1,8 +1,5 @@
 package com.zhh.jiagu.shell.util;
 
-import com.enclib.AESUtil2;
-import com.enclib.CommFileUtil;
-
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

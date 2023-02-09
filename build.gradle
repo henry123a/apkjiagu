@@ -34,52 +34,37 @@ task clean(type: Delete) {
 task jiagu() {
 
     delete project('jiagu_shell').buildDir
-    //打包编译壳aar
-    dependsOn project('jiagu_shell').tasks.findByPath(':jiagu_shell:bundleReleaseAar')
-
+    delete project('demo').buildDir
     delete project('jiaguLib').buildDir
-    //编译jiaguLib工程，生成jar文件
-    dependsOn project('jiaguLib').tasks.findByPath(':jiaguLib:build')
+    println(" =====清除了 jiagu_shell demo jiaguLib build目录========")
+    //打包最新的apk 和 壳子 aar
+    dependsOn project('jiagu_shell').tasks.findByPath(':jiagu_shell:bundleReleaseAar')
+    dependsOn project('demo').tasks.findByPath(':demo:assembleDebug')
+  //  dependsOn project('jiaguLib').tasks.findByPath(':jiaguLib:build')
 
+    println(" =====重新编译了 jiagu_shell demo 生成最新 aar apk========")
     doLast {
-        println("jiagu ============= 已编译Aar")
-
         //在根工程中创建jiagu文件夹
         def root = new File(rootDir, '/jiagu')
         if (root.exists()) {
             delete root
         }
-        root = rootProject.mkdir('jiagu')
+      //  root = rootProject.mkdir('jiagu')
         println("jiagu ============= 已重新创建了 - jiagu目录")
         //将aar文件复制到jiagu目录中
-        copy {
-            from 'jiagu_shell/build/outputs/aar'
-            into { root.absolutePath + "/aar" }
-            //include('**/*.aar')
-        }
-
-        //复制依赖的库文件信息
-        copy {
-            from 'jiaguLib/libs'
-            into { root.absolutePath + "/libs" }
-            //include('**/*.aar')
-        }
-
-        //复制加固jar和签名配置文件
-        copy {
-            from 'jiaguLib/build/libs', 'jiaguLib/keystore.cfg'
-            into { root.absolutePath }
-            //include('**/*.aar')
-        }
-        //复制apk
-        copy {
-            from 'demo/build/outputs/apk/release/demo-release.apk'
-            into { root.absolutePath }
-            //include('**/*.aar')
-        }
-        println("开始执行加固命令...")
+//        copy {
+//            from 'jiagu_shell/build/outputs/aar'
+//            into { root.absolutePath + "/aar" }
+//            //include('**/*.aar')
+//        }
+//        //复制apk
+//        copy {
+//            from 'demo/build/outputs/apk/release/demo-release.apk'
+//            into { root.absolutePath }
+//            //include('**/*.aar')
+//        }
        // def p1 = 'java -jar jiaguLib.jar demo-release.apk keystore.cfg'.execute()
-        // println(getExeInfo(p1))
+
     }
 
 }

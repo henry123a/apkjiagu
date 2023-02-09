@@ -49,10 +49,10 @@ public class JiaGuMain {
     private static final String OUT_TMP = ROOT + "temp/";
 
 
-    private static final String apkPath = "jiagu/demo-release.apk";
-    private static final String shellPath = "jiagu/aar/jiagu_shell-release.aar";
-    private static final String signInfoFilePath = "jiaguLib/keystore.cfg";
+    private static final String apkPath = "demo/build/outputs/apk/debug/demo-debug.apk";
+    private static final String shellPath = "jiagu_shell/build/outputs/aar/jiagu_shell-release.aar";
 
+    private static final String signInfoFilePath = "jiaguLib/keystore.cfg";
     private static final String apktoolPath = "/Users/cg/Desktop/dev/github_projects/apkjiagu/apktool.jar";
     private static final String buildTools = "/Users/cg/Library/Android/sdk/build-tools/29.0.3/";
     private static final String dxFullPath = buildTools + "dx";
